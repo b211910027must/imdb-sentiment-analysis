@@ -13,7 +13,7 @@ def get_device(use_mps=True, fallback_to_cpu=True):
     Returns:
         torch.device: The device to use for computations
     """
-    if use_mps and torch.backends.mps.is_available():
+    if use_mps and hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
         print("Using Apple MPS (Metal Performance Shaders) acceleration")
         return torch.device("mps")
     elif torch.cuda.is_available():

@@ -79,7 +79,8 @@ class BERTEmbedding:
         # Get embeddings
         with torch.no_grad():
             outputs = self.model(input_ids=input_ids, attention_mask=attention_mask)
-            # Use [CLS] token embedding (first token)
+            # Use [CLS] token embedding (first token) - represents entire sequence
+            # [CLS] is trained to aggregate semantic information of the whole sentence
             embeddings = outputs.last_hidden_state[:, 0, :].cpu().numpy()
         
         return embeddings

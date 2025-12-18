@@ -62,13 +62,17 @@ class LSTMClassifier(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         
-        self.lstm = nn.LSTM(
-            input_size=input_size,
-            hidden_size=hidden_size,
-            num_layers=num_layers,
-            batch_first=True,
-            dropout=dropout if num_layers > 1 else 0
-        )
+        # Only add dropout parameter if num_layers > 1 (LSTM requirement)
+        lstm_kwargs = {
+            'input_size': input_size,
+            'hidden_size': hidden_size,
+            'num_layers': num_layers,
+            'batch_first': True
+        }
+        if num_layers > 1:
+            lstm_kwargs['dropout'] = dropout
+        
+        self.lstm = nn.LSTM(**lstm_kwargs)
         
         self.dropout = nn.Dropout(dropout)
         self.fc = nn.Linear(hidden_size, 1)
